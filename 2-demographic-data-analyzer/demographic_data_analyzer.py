@@ -3,27 +3,34 @@ import pandas as pd
 
 def calculate_demographic_data(print_data=True):
     # Read data from file
-    df = None
+    df = pd.read_csv('adult.data.csv')
 
     # How many of each race are represented in this dataset? This should be a Pandas series with race names as the index labels.
-    race_count = None
+    race_count = df.race.value_counts()
 
     # What is the average age of men?
-    average_age_men = None
+    average_age_men = df.loc[df.sex == "Male"].age.mean().round(1)
 
     # What is the percentage of people who have a Bachelor's degree?
-    percentage_bachelors = None
+    total_people = df.shape[0]
+    num_people_with_bachelors = df.loc[df.education=="Bachelors"].shape[0]
+    percentage_bachelors = num_people_with_bachelors/total_people *100
 
     # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
     # What percentage of people without advanced education make more than 50K?
 
     # with and without `Bachelors`, `Masters`, or `Doctorate`
-    higher_education = None
-    lower_education = None
+    higher_education =  df.loc[(df.education == "Masters") |(df.education == "Bachelors") | (df.education == "Doctorate")]
+    lower_education = df.loc[(df.education != "Masters") & (df.education != "Bachelors") & (df.education != "Doctorate")]
 
     # percentage with salary >50K
-    higher_education_rich = None
-    lower_education_rich = None
+    total_people_higher_education = higher_education.shape[0]
+    num_people_with_higher_educationGT50K =  higher_education.loc[higher_education.salary == ">50K"].shape[0]
+    higher_education_rich = num_people_with_higher_educationGT50K/total_people_higher_education * 100
+
+    total_people_lower_education = lower_education.shape[0]
+    num_people_with_lower_educationGT50K = lower_education.loc[lower_education.salary == ">50K"].shape[0]
+    lower_education_rich = num_people_with_lower_educationGT50K / total_people_lower_education * 100
 
     # What is the minimum number of hours a person works per week (hours-per-week feature)?
     min_work_hours = None
